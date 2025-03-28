@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Bonjour la branche Fonctionnalité !' });
+  res.json({ message: 'Test du workflow CI/CD' });
 });
 
 app.get('/api/status', (req, res) => {
