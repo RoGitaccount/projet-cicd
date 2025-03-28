@@ -43,19 +43,46 @@ jobs:
     runs-on: ubuntu-latest
     # assure que le déploiement ne se fait que sur des merges dans main
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+
+
+      - name: Set up Docker Buildx
+        uses: actions/setup-buildx-action@v3 
+
+
+      - name: Build de l'image Docker
+        run: |
+         docker build -t project-cicd:${{github.sha}} .
+         docker tag projet-cicd:${{ github.sha }} projet-cicd:latest 
+
+
+      - name: Test du Docker container
+        run: |
+         docker run -d -p 3000:3000 --name test-container projet-cicd:latest 
+         sleep 5
+         curl http://localhost:3000/api/status
+         docker stop test-container
+         docker rm test-container
+
+
+      - name: Connection au docker Hub
+        uses: docker/login-action@v3
         with:
-          node-version: '18.19.1'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build for production
-        run: npm run build --if-present
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      - name: Push to Docker Hub
+        run: |
+            docker tag projet-cicd:latest ${{ secrets.DOCKERHUB_USERNAME }}/projet-cicd:latest
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/projet-cicd:latest
+
+
       - name : simulation de deploiement
         run: |
+         echo "Image docker construite"
          echo "déploiement de la version ${{github.sha}}"
          echo "Branche: ${{github.ref_name}}"
          echo "de : ${{github.actor}}"
