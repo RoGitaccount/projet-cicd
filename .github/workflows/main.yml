@@ -55,13 +55,19 @@ jobs:
          docker build -f ./Dockerfile -t project-cicd:${{ github.sha }} .
          docker tag project-cicd:${{ github.sha }} project-cicd:latest
 
+     
       - name: Test du Docker container
         run: |
-         docker run -d -p 3000:3000 --name test-container project-cicd:${{ github.sha }}
-         sleep 5
-         curl http://localhost:3000/api/status
-         docker stop test-container
-         docker rm test-container
+          docker run -d -p 3000:3000 --name test-container project-cicd:${{ github.sha }}
+          sleep 10
+          if ! curl http://localhost:3000/api/status; then
+            docker logs test-container
+            docker stop test-container
+            docker rm test-container
+            exit 1
+          fi
+          docker stop test-container
+          docker rm test-container
 
 
       - name: Connection au docker Hub
