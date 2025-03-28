@@ -55,6 +55,8 @@ jobs:
          docker build -f ./Dockerfile -t project-cicd:${{ github.sha }} .
          docker tag project-cicd:${{ github.sha }} project-cicd:latest
 
+      - name: Vérification des images Docker
+        run: docker images
      
       - name: Test du Docker container
         run: |
