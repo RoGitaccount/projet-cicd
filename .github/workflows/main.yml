@@ -37,3 +37,26 @@ jobs:
       run: npm install
     - name: Run tests
       run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    # assure que le déploiement ne se fait que sur des merges dans main
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.19.1'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build for production
+        run: npm run build --if-present
+      - name : simulation de deploiement
+        run: |
+         echo "déploiement de la version ${{github.sha}}"
+         echo "Branche: ${{github.ref_name}}"
+         echo "de : ${{github.actor}}"
+         echo "déploiement réussi"

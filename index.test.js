@@ -15,7 +15,7 @@ describe('API Tests', () => {
   });
 
 
-  test('GET /start doir retourner START', async () => {
+  test('GET /start doir retourner STOP', async () => {
     const response = await request(app).get('/start');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ message: 'STOP' });
