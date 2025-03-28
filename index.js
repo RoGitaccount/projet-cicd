@@ -11,6 +11,10 @@ app.get('/api/status', (req, res) => {
   res.json({ status: 'OK' });
 });
 
+app.get('/start', (req, res) => {
+  res.json({ message: 'STOP' });
+});
+
 // Ne pas écouter sur le port si on est en test
 if (process.env.NODE_ENV !== 'test') {
   app.listen(3000, () => {
