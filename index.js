@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello World!' });
+  res.json({ message: 'Bonjour la branche Fonctionnalité !' });
 });
 
 app.get('/api/status', (req, res) => {
