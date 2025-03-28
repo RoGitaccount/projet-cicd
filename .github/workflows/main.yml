@@ -52,13 +52,12 @@ jobs:
 
       - name: Build de l'image Docker
         run: |
-         docker build -f ./Dockerfile -t project-cicd:${{github.sha}} .
-         docker tag projet-cicd:${{ github.sha }} projet-cicd:latest 
-
+         docker build -f ./Dockerfile -t project-cicd:${{ github.sha }} .
+         docker tag project-cicd:${{ github.sha }} project-cicd:latest
 
       - name: Test du Docker container
         run: |
-         docker run -d -p 3000:3000 --name test-container projet-cicd:latest 
+         docker run -d -p 3000:3000 --name test-container project-cicd:${{ github.sha }}
          sleep 5
          curl http://localhost:3000/api/status
          docker stop test-container
