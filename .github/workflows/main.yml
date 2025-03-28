@@ -81,8 +81,8 @@ jobs:
 
       - name: Push to Docker Hub
         run: |
-            docker tag projet-cicd:latest ${{ secrets.DOCKERHUB_USERNAME }}/projet-cicd:latest
-            docker push ${{ secrets.DOCKERHUB_USERNAME }}/projet-cicd:latest
+            docker tag project-cicd:latest ${{ secrets.DOCKERHUB_USERNAME }}/project-cicd:latest
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/project-cicd:latest
 
 
       - name : simulation de deploiement
